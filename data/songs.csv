@@ -1,21 +1,21 @@
-id,title,artist,genre,mood,energy,tempo_bpm,valence,danceability,acousticness
-1,Sunrise City,Neon Echo,pop,happy,0.82,118,0.84,0.79,0.18
-2,Midnight Coding,LoRoom,lofi,chill,0.42,78,0.56,0.62,0.71
-3,Storm Runner,Voltline,rock,intense,0.91,152,0.48,0.66,0.10
-4,Library Rain,Paper Lanterns,lofi,chill,0.35,72,0.60,0.58,0.86
-5,Gym Hero,Max Pulse,pop,intense,0.93,132,0.77,0.88,0.05
-6,Spacewalk Thoughts,Orbit Bloom,ambient,chill,0.28,60,0.65,0.41,0.92
-7,Coffee Shop Stories,Slow Stereo,jazz,relaxed,0.37,90,0.71,0.54,0.89
-8,Night Drive Loop,Neon Echo,synthwave,moody,0.75,110,0.49,0.73,0.22
-9,Focus Flow,LoRoom,lofi,focused,0.40,80,0.59,0.60,0.78
-10,Rooftop Lights,Indigo Parade,indie pop,happy,0.76,124,0.81,0.82,0.35
-11,On Our Own,Bobby Brown,new jack swing,happy,0.80,112,0.75,0.85,0.08
-12,Giving You the Benefit,Pebbles,new jack swing,happy,0.78,110,0.80,0.86,0.10
-13,Creep,TLC,r&b,moody,0.55,72,0.55,0.78,0.25
-14,Arabian Knights,Latin Rascals,freestyle,intense,0.85,118,0.60,0.88,0.05
-15,No Reason to Cry,Judy Torres,freestyle,sad,0.82,119,0.22,0.84,0.08
-16,California Love,2Pac,hip hop,intense,0.88,92,0.70,0.80,0.05
-17,Romantic,Karyn White,new jack swing,happy,0.78,110,0.80,0.86,0.10
-18,Secret Rendezvous,Karyn White,new jack swing,moody,0.76,112,0.65,0.84,0.12
-19,Barbie Girl,Aqua,eurodance,happy,0.95,130,0.93,0.90,0.03
-20,S.O.S.,La Bouche,eurodance,intense,0.88,133,0.55,0.89,0.04
+id,title,artist,genre,mood,energy,tempo_bpm,valence,danceability,acousticness,year,decade,popularity,mood_tags,language
+1,Sunrise City,Neon Echo,pop,happy,0.82,118,0.84,0.79,0.18,2021,2020s,55,happy;bright;summer,english
+2,Midnight Coding,LoRoom,lofi,chill,0.42,78,0.56,0.62,0.71,2020,2020s,48,chill;focus;night,instrumental
+3,Storm Runner,Voltline,rock,intense,0.91,152,0.48,0.66,0.10,2019,2010s,42,intense;driving;dark,english
+4,Library Rain,Paper Lanterns,lofi,chill,0.35,72,0.60,0.58,0.86,2022,2020s,39,chill;calm;rainy,instrumental
+5,Gym Hero,Max Pulse,pop,intense,0.93,132,0.77,0.88,0.05,2023,2020s,61,intense;workout;upbeat,english
+6,Spacewalk Thoughts,Orbit Bloom,ambient,chill,0.28,60,0.65,0.41,0.92,2018,2010s,30,chill;dreamy;space,instrumental
+7,Coffee Shop Stories,Slow Stereo,jazz,relaxed,0.37,90,0.71,0.54,0.89,2017,2010s,35,relaxed;warm;cozy,english
+8,Night Drive Loop,Neon Echo,synthwave,moody,0.75,110,0.49,0.73,0.22,2019,2010s,44,moody;night;retro,instrumental
+9,Focus Flow,LoRoom,lofi,focused,0.40,80,0.59,0.60,0.78,2021,2020s,41,focused;calm;study,instrumental
+10,Rooftop Lights,Indigo Parade,indie pop,happy,0.76,124,0.81,0.82,0.35,2022,2020s,52,happy;dance;night,english
+11,On Our Own,Bobby Brown,new jack swing,happy,0.80,112,0.75,0.85,0.08,1989,1980s,78,happy;confident;funky,english
+12,Giving You the Benefit,Pebbles,new jack swing,happy,0.78,110,0.80,0.86,0.10,1990,1990s,65,happy;groove;confident,english
+13,Creep,TLC,r&b,moody,0.55,72,0.55,0.78,0.25,1994,1990s,74,moody;smooth;melodic,english
+14,Arabian Knights,Latin Rascals,freestyle,intense,0.85,118,0.60,0.88,0.05,1987,1980s,45,intense;dance;club,english
+15,No Reason to Cry,Judy Torres,freestyle,sad,0.82,119,0.22,0.84,0.08,1989,1980s,50,sad;heartbreak;dance,english
+16,California Love,2Pac,hip hop,intense,0.88,92,0.70,0.80,0.05,1995,1990s,90,intense;party;anthem,english
+17,Romantic,Karyn White,new jack swing,happy,0.78,110,0.80,0.86,0.10,1991,1990s,70,happy;romantic;smooth,english
+18,Secret Rendezvous,Karyn White,new jack swing,moody,0.76,112,0.65,0.84,0.12,1988,1980s,62,moody;romantic;groove,english
+19,Barbie Girl,Aqua,eurodance,happy,0.95,130,0.93,0.90,0.03,1997,1990s,85,happy;playful;novelty,english
+20,S.O.S.,La Bouche,eurodance,intense,0.88,133,0.55,0.89,0.04,1999,1990s,55,intense;urgent;dance,english
