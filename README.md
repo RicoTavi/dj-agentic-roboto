@@ -16,6 +16,87 @@ known, real-world relationships between songs.
 
 ---
 
+## How Real Recommenders Work
+
+Services like Spotify and YouTube face the same basic problem: millions of items, one
+person, one screen. There are two fundamentally different ways to decide what to show,
+and real systems use both.
+
+### Content-based filtering
+
+Describe the item, describe the listener's taste, and compare them. A song is reduced to
+features — genre, mood, tempo, energy, how acoustic it sounds — and recommended when
+those features line up with what the listener wants.
+
+Spotify produces these features by machine: neural networks analyse the raw audio and
+output values for tempo, energy, danceability, and acousticness. Those are the same
+field names used in this project's `songs.csv`, which is modelled on that format. The
+difference is that a streaming service measures them from the audio, while the values
+here were assigned by hand.
+
+### Collaborative filtering
+
+This approach ignores what a song *is* and looks only at who listened to it. Imagine a
+large table where each row is a listener, each column is a song, and a mark means that
+person played it:
+
+```text
+              Creep   On Our Own   Barbie Girl   Romantic
+  You           x          x             .           .
+  Listener B    x          x             .           x
+  Listener C    .          .             x           .
+```
+
+Listener B's row looks like yours, and they played "Romantic" — so "Romantic" is
+recommended to you. Nothing about the song's genre, mood, or energy was used. The
+connection came entirely from behaviour.
+
+Importantly, this behaviour is usually **implicit feedback** rather than ratings.
+Spotify relies mostly on signals like play counts, skips, playlist adds, and artist page
+visits — what a listener does, rather than what they say they like.
+
+In practice, large services combine both. Spotify's Discover Weekly blends collaborative
+filtering over listening behaviour, natural language processing over text written about
+music online, and audio analysis of the tracks themselves.
+
+### Input data, preferences, and ranking are three separate things
+
+It helps to keep three ideas apart:
+
+1. **Input data** — the songs and their attributes. Facts about items.
+2. **User preferences** — a description of one listener, either stated directly
+   ("I like high-energy pop") or inferred from listening history.
+3. **Ranking and selection** — scoring every candidate, sorting, and choosing how many
+   to show. A score means nothing on its own; it only matters relative to the others.
+
+At scale, step 3 is usually split in two. YouTube's published architecture first runs
+**candidate generation**, narrowing millions of videos to a few hundred using watch
+history and context, then runs a **ranking** model that scores those few hundred
+precisely and orders them.
+
+### Where this project fits
+
+This project is content-based only, and that is a structural fact rather than a
+shortcut: there are no users, no play counts, and no ratings in the dataset, so there is
+no behavioural data for collaborative filtering to work with.
+
+It also has no candidate-generation stage, because a 20-song catalog can be scored in a
+single pass. `score_song` and `recommend_songs` correspond to the ranking stage above.
+
+This choice has one real advantage worth naming. **Cold start** is the problem of
+recommending when there is no history. A brand-new song has no listeners, so
+collaborative filtering cannot place it — but a content-based system can recommend it
+immediately, because it has attributes from the moment it exists. The same applies to a
+brand-new listener: they have no history, but they can state a genre, a mood, and an
+energy level, which is exactly what the `user_prefs` dictionary in this project holds.
+
+*Further reading:* [Deep Neural Networks for YouTube Recommendations](https://research.google/pubs/deep-neural-networks-for-youtube-recommendations/)
+(Covington, Adams & Sargin, RecSys 2016);
+[Behind Spotify's Discover Weekly](https://blogs.cornell.edu/info2040/2019/10/22/behind-spotifys-discover-weekly-playlist/)
+(Cornell INFO 2040 course blog).
+
+---
+
 ## How The System Works
 
 ### The data
