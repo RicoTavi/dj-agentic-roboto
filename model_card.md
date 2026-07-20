@@ -50,6 +50,25 @@ score.
 Genre is deliberately worth more than mood and energy combined. That makes the results
 predictable and easy to explain, and it is also the model's biggest source of bias.
 
+Two optional preferences can add to the score, but only when the listener states them:
+a favourite decade (half a point) and a list of mood words that are checked against
+each song's tags (up to half a point).
+
+**Ranking modes.** The weighting above is the default, called *balanced*. The model
+also offers three alternative strategies the user can switch to: *mood-first* (mood
+outweighs genre), *energy* (only energy similarity counts), and *crowd-pleaser* (the
+balanced recipe plus a bonus of up to 1.5 points for popular songs). Each mode is just
+a different set of weights flowing through the same scoring logic.
+
+**Fairness: the artist repetition penalty.** Without intervention, a strong artist can
+occupy several slots of a five-song list — in testing, one artist held two of the top
+four for the new jack swing profile. The model now subtracts 0.75 points from a song
+for each track by the same artist already selected above it. This improves fairness in
+two directions: listeners see more variety instead of a single artist's catalog, and
+other artists are not crowded out of short lists by one dominant name. The deduction is
+printed in the song's reasons whenever it fires, so the adjustment is visible rather
+than silent. Its limits are noted in section 6.
+
 **Changes from the starter logic:** the starter project contained only function
 signatures and placeholder returns. All scoring, loading, and ranking behaviour
 described here was added, along with ten additional songs.
@@ -70,10 +89,16 @@ rock, ambient, jazz, synthwave, indie pop, r&b, and hip hop.
 Mood counts: happy 5, intense 4, chill 3, moody 3, and one each of relaxed, focused,
 and sad.
 
+Each song carries fifteen fields. Five were added as a stretch feature: release year,
+decade, a 0–100 popularity estimate, a short list of mood tags, and language.
+
 **Important caveat about the numbers.** The `energy`, `valence`, `danceability`, and
 `acousticness` values imitate the audio-analysis features a streaming service computes
 from a waveform. Here they were assigned by hand. Only the `tempo_bpm` values for the
-real songs were looked up from public sources. No audio was analysed.
+real songs were looked up from public sources. Of the added fields, release years for
+the ten real songs are real; years for the fictional songs are invented, and the
+popularity values are estimates throughout — informed by chart performance for the real
+songs, invented for the fictional ones. The mood tags were authored by hand. No audio was analysed.
 
 **What is missing from the data:** release year, lyrics, language, popularity, listening
 history, and any information about scenes, eras, or artist lineage.
@@ -128,7 +153,14 @@ catalog get worse results through no fault of their own.
 **Filter bubbles by construction.** The fictional starter songs and the added real songs
 share no genres. A profile aimed at one group can never surface the other.
 
-**No diversity control.** One artist can occupy multiple slots in a five-song list.
+**The diversity control is narrow.** The artist repetition penalty only sees artist
+names. Repetition of genre, mood, or era is never penalised, the 0.75 deduction is a
+hand-picked constant rather than a measured one, and an artist releasing under two
+names would evade it entirely.
+
+**Estimated values feed real rankings.** The popularity numbers that drive the
+crowd-pleaser mode, and the mood tags that can add up to half a point, were both
+authored by hand. Any bias in those estimates flows directly into the rankings.
 
 **False confidence.** The model always returns five results, formatted identically,
 whether the top score is 4.00 or 0.95. It has no way to say "I have nothing good for
@@ -193,9 +225,11 @@ the rules predicted.
 - **A confidence threshold**, so the model can return two results instead of padding to
   five, or state that it found no good match.
 - **Multi-value profiles**, so a listener can like more than one genre or mood.
-- **Use the unused columns** — `valence`, `danceability`, `acousticness`, `tempo_bpm`,
-  and the `likes_acoustic` preference that is currently declared but never read.
-- **A diversity penalty**, so one artist cannot fill several slots.
+- **Use the still-unused columns** — `valence`, `danceability`, `acousticness`,
+  `tempo_bpm`, `language`, and the `likes_acoustic` preference that is declared but
+  never read.
+- **Broaden the diversity penalty** beyond artist names, to genre, mood, or era
+  repetition — and derive the penalty size from data instead of picking it by hand.
 - **Era and scene as features**, which is the information the genre experiment showed
   the model was actually missing.
 - **A larger, more balanced catalog**, ideally with feature values that were measured
