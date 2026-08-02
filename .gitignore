@@ -14,3 +14,7 @@ venv/
 # Pytest cache
 .pytest_cache/
 
+# Secrets - never commit the real API key
+lastfm_api_key.txt
+.env
+

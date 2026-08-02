@@ -97,3 +97,29 @@ class LocalCatalogSource:
     def search(self, query: RetrievalQuery) -> List[Dict]:
         """Returns every catalog song that matches the query."""
         return [song for song in self.songs if _matches(song, query)]
+
+
+class CompositeSource:
+    """
+    Merges several retrieval sources into one (RAG multi-source). Results from
+    all sources are concatenated and de-duplicated by title+artist, with earlier
+    sources winning ties - so the local catalog's richer rows are preferred over
+    a thinner Last.fm entry for the same song.
+    """
+
+    name = "multi-source"
+
+    def __init__(self, sources: List):
+        self.sources = list(sources)
+
+    def search(self, query: RetrievalQuery) -> List[Dict]:
+        merged: List[Dict] = []
+        seen = set()
+        for source in self.sources:
+            for song in source.search(query):
+                key = (norm(song.get("title")), norm(song.get("artist")))
+                if key in seen:
+                    continue
+                seen.add(key)
+                merged.append(song)
+        return merged

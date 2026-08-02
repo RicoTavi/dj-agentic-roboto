@@ -26,8 +26,31 @@ DEFAULT_CATALOG = ROOT / "data" / "catalog.csv"
 DEFAULT_TRACE = ROOT / "logs" / "agent_run.md"
 
 
+def _build_source(profile, catalog, use_lastfm: bool):
+    """Builds the retrieval source: local catalog alone, or local + Last.fm."""
+    from src.retrieval import CompositeSource, LocalCatalogSource
+    local = LocalCatalogSource(catalog)
+    if not use_lastfm:
+        return local
+
+    from src.keys import load_lastfm_key
+    from src.lastfm import build_lastfm_source
+    key = load_lastfm_key()          # None -> cache-only (offline) mode
+    lastfm, meta = build_lastfm_source(
+        profile.dominant_genre, profile.dominant_mood, key,
+        allow_network=key is not None)
+    if meta["candidates"] == 0:
+        print("(Last.fm added 0 candidates - no key and empty cache; "
+              "using the local catalog only.)\n")
+        return local
+    mode = "live" if meta["network_used"] else "cached"
+    print(f"Last.fm ({mode}) added {meta['candidates']} real candidate(s) to "
+          "the pool.\n")
+    return CompositeSource([local, lastfm])
+
+
 def run(seeds_path: str, catalog_path: str, k: int, trace_path: str,
-        voice: str = "baseline") -> int:
+        voice: str = "baseline", use_lastfm: bool = True) -> int:
     """Runs one end-to-end recommendation and prints a readable report."""
     # --- Guardrail: seeds must be present and carry usable signals ------
     seeds = load_songs(seeds_path)
@@ -44,8 +67,8 @@ def run(seeds_path: str, catalog_path: str, k: int, trace_path: str,
     print("Your taste, learned from your seeds:")
     print(f"  {profile.explain()}\n")
 
-    from src.retrieval import LocalCatalogSource
-    agent = RecommenderAgent(LocalCatalogSource(catalog), profile, seeds, k=k)
+    source = _build_source(profile, catalog, use_lastfm)
+    agent = RecommenderAgent(source, profile, seeds, k=k)
     result = agent.run()
 
     # --- Report ---------------------------------------------------------
@@ -89,8 +112,11 @@ def main() -> None:
                         help="Where to save the reasoning trace.")
     parser.add_argument("--voice", choices=["baseline", "dj"], default="baseline",
                         help="Explanation style (default: baseline).")
+    parser.add_argument("--no-lastfm", action="store_true",
+                        help="Use only the local catalog (skip Last.fm retrieval).")
     args = parser.parse_args()
-    raise SystemExit(run(args.seeds, args.catalog, args.k, args.trace, args.voice))
+    raise SystemExit(run(args.seeds, args.catalog, args.k, args.trace,
+                         args.voice, use_lastfm=not args.no_lastfm))
 
 
 if __name__ == "__main__":

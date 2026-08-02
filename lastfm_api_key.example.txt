@@ -1,0 +1,10 @@
+# Template for the Last.fm API key file.
+#
+# To enable live retrieval:
+#   1. Copy this file to  lastfm_api_key.txt  (that name is gitignored).
+#   2. Replace the placeholder below with your real key.
+#   3. Get a free key at https://www.last.fm/api/account/create
+#
+# Without a key the system runs in offline mode against the committed cache,
+# so this step is optional and never required for grading.
+PASTE_YOUR_KEY_HERE
