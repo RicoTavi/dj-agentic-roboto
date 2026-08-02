@@ -25,7 +25,8 @@ DEFAULT_CATALOG = ROOT / "data" / "catalog.csv"
 DEFAULT_TRACE = ROOT / "logs" / "agent_run.md"
 
 
-def run(seeds_path: str, catalog_path: str, k: int, trace_path: str) -> int:
+def run(seeds_path: str, catalog_path: str, k: int, trace_path: str,
+        voice: str = "baseline") -> int:
     """Runs one end-to-end recommendation and prints a readable report."""
     # --- Guardrail: seeds must load and be non-empty --------------------
     seeds = load_songs(seeds_path)
@@ -58,11 +59,14 @@ def run(seeds_path: str, catalog_path: str, k: int, trace_path: str) -> int:
         print("No recommendations: nothing in the catalog cleared the bar, so "
               "the agent declined rather than force a bad match.")
     else:
-        print(f"Your mixtape (top {len(result.recommendations)}):")
+        from src.explain import dj_explanation
+        print(f"Your mixtape (top {len(result.recommendations)}), "
+              f"voice: {voice}:")
         for rank, (song, score, why) in enumerate(result.recommendations, 1):
             print(f"  {rank}. {song.get('title')} - {song.get('artist')} "
                   f"[{song.get('genre')}] (score {score:.2f})")
-            print(f"       because: {why}")
+            reason = dj_explanation(song, seeds, why) if voice == "dj" else why
+            print(f"       because: {reason}")
 
     # --- Save the reasoning trace ---------------------------------------
     trace = format_trace(result)
@@ -82,8 +86,10 @@ def main() -> None:
                         help="How many songs to recommend (default: 5).")
     parser.add_argument("--trace", default=str(DEFAULT_TRACE),
                         help="Where to save the reasoning trace.")
+    parser.add_argument("--voice", choices=["baseline", "dj"], default="baseline",
+                        help="Explanation style (default: baseline).")
     args = parser.parse_args()
-    raise SystemExit(run(args.seeds, args.catalog, args.k, args.trace))
+    raise SystemExit(run(args.seeds, args.catalog, args.k, args.trace, args.voice))
 
 
 if __name__ == "__main__":
