@@ -16,6 +16,7 @@ import argparse
 from pathlib import Path
 
 from src.agent import RecommenderAgent, format_trace
+from src.guardrails import validate_seeds
 from src.profile import derive_profile
 from src.recommender import load_songs
 
@@ -28,11 +29,11 @@ DEFAULT_TRACE = ROOT / "logs" / "agent_run.md"
 def run(seeds_path: str, catalog_path: str, k: int, trace_path: str,
         voice: str = "baseline") -> int:
     """Runs one end-to-end recommendation and prints a readable report."""
-    # --- Guardrail: seeds must load and be non-empty --------------------
+    # --- Guardrail: seeds must be present and carry usable signals ------
     seeds = load_songs(seeds_path)
-    if not seeds:
-        print(f"[guardrail] No seed songs found in {seeds_path}. "
-              "Give me a few songs you like and I'll learn your taste.")
+    ok, message = validate_seeds(seeds)
+    if not ok:
+        print(f"[guardrail] {message}")
         return 1
 
     catalog = load_songs(catalog_path)
