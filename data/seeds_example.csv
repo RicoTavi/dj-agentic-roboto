@@ -1,0 +1,13 @@
+id,title,artist,genre,mood,energy,tempo_bpm,valence,danceability,acousticness,year,decade,popularity,mood_tags,language
+201,Weekend Kind of Love,Andre Sotto,new jack swing,happy,0.80,112,0.77,0.87,0.08,1990,1990s,62,happy;groove;funky,english
+202,Cassette Crush,Ronnie Blaze,new jack swing,happy,0.82,114,0.79,0.88,0.07,1989,1980s,60,happy;confident;dance,english
+203,Backspin Romance,Teddy Sway,new jack swing,moody,0.72,108,0.63,0.84,0.12,1991,1990s,55,moody;romantic;smooth,english
+204,Payday Swing,The Fresh Committee,new jack swing,happy,0.84,116,0.80,0.89,0.06,1988,1980s,58,happy;party;funky,english
+205,Club Lights Fade,Lisette Cruz,freestyle,sad,0.83,120,0.29,0.85,0.06,1988,1980s,52,sad;heartbreak;club,english
+206,Miami Nights Forever,Sabrina Costa,freestyle,happy,0.85,124,0.73,0.87,0.05,1990,1990s,51,happy;dance;club,english
+207,Boulevard Beat,Q-Town Crew,freestyle,intense,0.87,126,0.60,0.86,0.04,1987,1980s,47,intense;club;retro,english
+208,Slow Dance Confession,Vanessa Reed,r&b,moody,0.53,72,0.51,0.75,0.27,1994,1990s,64,moody;smooth;romantic,english
+209,Two Left Feelings,Ivory Lane,r&b,sad,0.46,66,0.31,0.68,0.30,1995,1990s,57,sad;heartbreak;smooth,english
+210,Anthem for the Block,MC Talon,hip hop,intense,0.86,94,0.66,0.82,0.05,1996,1990s,70,intense;party;anthem,english
+211,Ibiza Rocket Ride,Satellite 9,eurodance,intense,0.90,132,0.62,0.90,0.03,1997,1990s,54,intense;dance;club,english
+212,Confetti Summer,The Polas,pop,happy,0.80,120,0.82,0.83,0.12,2019,2010s,63,happy;bright;dance,english

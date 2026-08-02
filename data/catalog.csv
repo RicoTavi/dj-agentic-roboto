@@ -1,0 +1,39 @@
+id,title,artist,genre,mood,energy,tempo_bpm,valence,danceability,acousticness,year,decade,popularity,mood_tags,language
+101,My Prerogative,Bobby Brown,new jack swing,happy,0.82,112,0.65,0.85,0.06,1988,1980s,85,confident;funky;dance,english
+102,Poison,Bell Biv DeVoe,new jack swing,happy,0.85,110,0.70,0.88,0.04,1990,1990s,88,party;funky;dance,english
+103,I Want Her,Keith Sweat,new jack swing,moody,0.70,108,0.55,0.82,0.10,1987,1980s,78,romantic;smooth;groove,english
+104,Just Got Paid,Johnny Kemp,new jack swing,happy,0.83,112,0.78,0.87,0.05,1988,1980s,74,happy;party;funky,english
+105,Rump Shaker,Wreckx-n-Effect,new jack swing,intense,0.85,104,0.70,0.90,0.05,1992,1990s,80,party;dance;anthem,english
+106,Point of No Return,Expose,freestyle,intense,0.86,120,0.60,0.88,0.05,1987,1980s,76,dance;club;intense,english
+107,Party Your Body,Stevie B,freestyle,happy,0.87,122,0.72,0.89,0.04,1988,1980s,70,dance;club;party,english
+108,Show Me,The Cover Girls,freestyle,happy,0.85,118,0.70,0.87,0.05,1987,1980s,72,dance;club;upbeat,english
+109,Over and Over,Pajama Party,freestyle,happy,0.84,116,0.68,0.86,0.06,1989,1980s,58,dance;club;retro,english
+110,Boombox Boulevard,The Bronx Beat,freestyle,intense,0.88,126,0.60,0.86,0.04,1986,1980s,44,intense;club;retro,english
+111,Real Love,Mary J. Blige,r&b,happy,0.72,96,0.68,0.83,0.10,1992,1990s,85,smooth;groove;confident,english
+112,Slow Burn,Deja Nine,r&b,relaxed,0.48,68,0.55,0.71,0.34,1996,1990s,60,relaxed;smooth;warm,english
+113,Two AM Feelings,Kelis Monroe,r&b,sad,0.45,66,0.30,0.68,0.30,1995,1990s,58,sad;heartbreak;smooth,english
+114,Blacktop Anthem,MC Girder,hip hop,intense,0.87,94,0.66,0.82,0.05,1996,1990s,72,intense;party;anthem,english
+115,Corner Store Cipher,Lyric Pace,hip hop,moody,0.70,88,0.45,0.78,0.10,1998,1990s,55,moody;street;boom-bap,english
+116,Golden Era Glow,Dusty Vinyl,hip hop,happy,0.78,96,0.68,0.80,0.08,1993,1990s,50,happy;party;retro,english
+117,Rocket to Ibiza,Euro Static,eurodance,intense,0.90,132,0.62,0.90,0.03,1997,1990s,54,intense;dance;club,english
+118,Dancing Satellite,Bella Volt,eurodance,happy,0.92,134,0.88,0.91,0.02,1998,1990s,57,happy;playful;dance,english
+119,Techno Sunrise,Kilo Watt,eurodance,intense,0.89,138,0.55,0.88,0.03,1999,1990s,48,intense;urgent;club,english
+120,Sugar Static,Polaroid Kids,pop,happy,0.80,120,0.82,0.83,0.12,2019,2010s,63,happy;bright;dance,english
+121,Paper Airplanes,Marlowe,pop,happy,0.74,116,0.78,0.79,0.20,2021,2020s,59,happy;summer;bright,english
+122,Glass Hearts,Aether Youth,synthpop,moody,0.72,112,0.52,0.76,0.18,2020,2020s,55,moody;night;retro,english
+123,Midnight Arcade,Neon Tide,synthwave,moody,0.73,110,0.48,0.74,0.20,2018,2010s,47,moody;retro;night,instrumental
+124,Rainy Window Loops,Tape Deck,lofi,chill,0.34,74,0.55,0.60,0.82,2021,2020s,40,chill;study;rainy,instrumental
+125,Slow Morning,Kettle and Fog,lofi,chill,0.32,70,0.58,0.57,0.85,2022,2020s,38,chill;calm;morning,instrumental
+126,Deep Focus No 4,Cortex,lofi,focused,0.38,80,0.54,0.59,0.79,2020,2020s,42,focused;study;calm,instrumental
+127,Under Stars,Nimbus Field,ambient,chill,0.24,58,0.60,0.38,0.94,2019,2010s,29,chill;dreamy;space,instrumental
+128,Tide Pool,Glacier Slow,ambient,relaxed,0.26,62,0.63,0.40,0.91,2021,2020s,31,relaxed;calm;water,instrumental
+129,Concrete Sunset,The Ridgelines,rock,intense,0.90,148,0.50,0.64,0.09,2017,2010s,44,intense;driving;anthem,english
+130,Static Parade,Wolves in Denim,rock,moody,0.78,138,0.42,0.60,0.14,2019,2010s,41,moody;driving;dark,english
+131,Backseat Comets,Indigo Parade,indie pop,happy,0.75,122,0.79,0.81,0.30,2022,2020s,53,happy;dance;summer,english
+132,Hometown Ghosts,Paper Lanterns,indie folk,relaxed,0.40,92,0.52,0.55,0.80,2020,2020s,37,relaxed;warm;acoustic,english
+133,Late Set Blues,Slow Stereo,jazz,relaxed,0.36,88,0.60,0.53,0.87,2018,2010s,34,relaxed;warm;cozy,instrumental
+134,Brass and Rain,Nightcap Trio,jazz,moody,0.42,96,0.48,0.56,0.83,2019,2010s,33,moody;smooth;cozy,instrumental
+135,Sol y Sombra,Grupo Marea,latin pop,happy,0.77,102,0.80,0.85,0.15,2021,2020s,56,happy;summer;dance,spanish
+136,Cumbia del Rio,Rio Abajo,cumbia,happy,0.72,96,0.78,0.83,0.22,2020,2020s,45,happy;dance;festive,spanish
+137,Redline,Max Pulse,edm,intense,0.95,140,0.70,0.86,0.02,2023,2020s,60,intense;workout;drop,english
+138,Adrenaline Hour,Volt Kids,edm,intense,0.93,150,0.62,0.84,0.03,2022,2020s,52,intense;workout;club,english
