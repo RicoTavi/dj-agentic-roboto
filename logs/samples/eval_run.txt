@@ -1,0 +1,14 @@
+# Evaluation Report
+
+| Case | Input | Expected behavior | Confidence | Result |
+| --- | --- | --- | --- | --- |
+| typical_taste | 5 coherent new jack swing / freestyle seeds | returns a full set with medium/high confidence | high (1.00) | PASS |
+| too_few_seeds | only 2 seeds | still answers, but flags low/medium confidence | medium (0.60) | PASS |
+| empty_input | no seed songs at all | guardrail blocks with a clear message | blocked | PASS |
+| garbage_rows | rows with no genre, mood, or energy | guardrail blocks (can't learn a taste from noise) | blocked | PASS |
+| genre_not_in_catalog | a cumbia taste (catalog has almost none) | widens past genre (2+ steps) and still answers | low (0.36) | PASS |
+| nothing_fits | high-energy dance taste vs an ambient-only crate | honestly refuses rather than force a weak match | none (0.00) | PASS |
+
+**6 of 6 checks passed.**
+
+Report written to logs/eval_report.md

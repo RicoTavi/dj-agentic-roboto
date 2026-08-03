@@ -1,0 +1,28 @@
+Loaded 12 seed song(s) and 38 catalog song(s).
+
+Your taste, learned from your seeds:
+  Derived from 12 seed song(s). Dominant genre: new jack swing (4/12). Dominant mood: happy (5/12). Average energy: 0.77. Leans 1990s. Signature tags: happy, dance, club, smooth, intense.
+
+Last.fm (live) added 60 real candidate(s) to the pool.
+
+Agent worked through 2 search step(s). Confidence: HIGH (0.80).
+
+Your mixtape (top 8), voice: baseline:
+  1. Poison - Bell Biv DeVoe [new jack swing] (score 4.67)
+       because: genre match (+2.0), mood match (+1.0), energy similarity (+0.92), decade match (+0.5), mood tags ['dance'] (+0.25)
+  2. My Prerogative - Bobby Brown [new jack swing] (score 4.20)
+       because: genre match (+2.0), mood match (+1.0), energy similarity (+0.95), mood tags ['dance'] (+0.25)
+  3. Just Got Paid - Johnny Kemp [new jack swing] (score 4.19)
+       because: genre match (+2.0), mood match (+1.0), energy similarity (+0.94), mood tags ['happy'] (+0.25)
+  4. Rump Shaker - Wreckx-n-Effect [new jack swing] (score 3.67)
+       because: genre match (+2.0), energy similarity (+0.92), decade match (+0.5), mood tags ['dance'] (+0.25)
+  5. I Want Her - Keith Sweat [new jack swing] (score 3.18)
+       because: genre match (+2.0), energy similarity (+0.93), mood tags ['smooth'] (+0.25)
+  6. Alright - Janet Jackson [new jack swing] (score 2.00)
+       because: genre match (+2.0)
+  7. Don't Walk Away - Jade [new jack swing] (score 2.00)
+       because: genre match (+2.0)
+  8. Every Little Thing I Do - Soul for Real [new jack swing] (score 2.00)
+       because: genre match (+2.0)
+
+Reasoning trace saved to /dev/null

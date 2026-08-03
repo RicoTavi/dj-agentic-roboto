@@ -7,7 +7,7 @@
 ## Reasoning steps
 ### Iteration 0
 - **Plan:** Search for new jack swing near energy 0.77.
-- **Action:** Retrieved 5 candidate(s) from local-catalog (after removing your seeds).
+- **Action:** Retrieved 5 candidate(s) from multi-source (after removing your seeds).
 - **Observation:** Top score 4.67; 5 ranked; 5 distinct artist(s).
 - **Decision:** Accept: strong matches and a full set.
 

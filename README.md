@@ -1,4 +1,220 @@
-# 🎵 Music Recommender Simulation
+# 🎧 DJ Agentic Roboto — Mixtape Taste Maker
+
+> An applied AI system for CodePath AI110 (Project 4). It learns your music taste
+> from a handful of songs you already like, then an **agent** plans a search,
+> retrieves candidates, **checks its own picks**, and builds you a mixtape — always
+> explaining *why*, and refusing when it has nothing good.
+
+## The base project this extends (Modules 1–3)
+
+**Original project:** *Music Recommender Simulation* (CodePath AI110, Week 6) — a
+command-line, **content-based** recommender. It loads 20 songs from
+`data/songs.csv`, scores each against a hand-written taste profile on genre / mood /
+energy, and returns a ranked list with a plain-English reason for every score. Its
+soul is **explainable scoring**: you can always answer "why this song?" (The full
+original documentation is preserved further down this file.)
+
+## What this version adds
+
+DJ Agentic Roboto keeps that explainable scorer as the **brain** and wraps a full
+applied AI system around it:
+
+| New component | What it does |
+| --- | --- |
+| **Taste profile derivation** (`src/profile.py`) | Learns your profile *from seed songs you like*, instead of a hand-written dictionary. |
+| **Agentic loop** (`src/agent.py`) — *the required AI feature* | Plans a query → retrieves → **checks its own picks** → widens or **refuses** → explains, with a reasoning trace. |
+| **Multi-source retrieval / RAG** (`src/lastfm.py`) | Local catalog **+ live-or-cached Last.fm** real tracks. |
+| **Confidence + guardrails** (`src/guardrails.py`) | Rates its own certainty; refuses empty or signal-less input and no-good-match cases. |
+| **Specialized "DJ voice"** (`src/explain.py`) | A second explanation style anchored to your seed songs. |
+| **Evaluation harness** (`src/evaluate.py`) | Runs 6 predefined inputs and prints a pass/fail + confidence report. |
+
+The single AI feature required by the brief is the **agentic loop**; the other four
+components implement the optional stretch features (agentic traces, RAG multi-source,
+specialization, test harness).
+
+## Architecture
+
+```mermaid
+flowchart TD
+    seeds["User seed songs (CSV)"] --> guard{"Guardrail<br/>validate_seeds"}
+    guard -- "empty / no signal" --> refuse1["Refuse with a clear message"]
+    guard -- "ok" --> profile["Derive TasteProfile<br/>genre, mood, energy, tags"]
+    profile --> plan["PLAN a retrieval query"]
+    plan --> retrieve["RETRIEVE candidates<br/>(seeds excluded)"]
+    retrieve --> score["SCORE with the original scorer"]
+    score --> check{"CHECK<br/>enough? good enough?"}
+    check -- "no: widen" --> plan
+    check -- "exhausted &amp; too weak" --> refuse2["Refuse honestly"]
+    check -- "yes" --> explain{"EXPLAIN<br/>baseline or DJ voice"}
+    explain --> out["Ranked mixtape + confidence"]
+    local[("Local catalog.csv")] --> retrieve
+    lastfm[("Last.fm cached JSON")] --> retrieve
+    plan -. log .-> trace["Reasoning trace<br/>logs/agent_run.md"]
+    check -. log .-> trace
+    eval["Eval harness (6 inputs)"] -. checks .-> check
+```
+
+Data flows **input → process → output**: seed songs enter, a guardrail validates
+them, a taste profile is derived, and the agent loops plan→retrieve→check→refine
+over two retrieval sources until it has a strong set (or honestly refuses). The
+original scorer ranks every candidate; an explanation renderer produces the final
+"why". Reasoning traces are logged, and the evaluation harness checks the whole
+path. Diagram source: [`diagrams/architecture.mmd`](diagrams/architecture.mmd).
+
+## Setup
+
+No third-party dependencies — Python standard library only.
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+Run the system on the example library:
+
+```bash
+python -m src.app                        # baseline explanations
+python -m src.app --voice dj             # DJ-voice explanations
+python -m src.app --seeds my_songs.csv   # your own library (same CSV columns)
+python -m src.app --k 8 --no-lastfm      # local catalog only
+```
+
+Run the tests and the evaluation harness:
+
+```bash
+python -m pytest -q
+python -m src.evaluate
+```
+
+**Last.fm (optional).** The system runs fully offline against a committed cache
+(`data/lastfm_cache.json`), so **no key is needed to run or grade it**. To fetch
+live instead, get a free key at <https://www.last.fm/api/account/create>, copy
+`lastfm_api_key.example.txt` → `lastfm_api_key.txt` (gitignored), and paste your
+key. A run reports `Last.fm (live)` with a key and `Last.fm (cached)` without one —
+the recommendations are the same either way.
+
+## Sample interactions (real program output)
+
+### 1. Learns your taste and builds a mixtape (DJ voice)
+
+```text
+$ python -m src.app --voice dj
+Loaded 12 seed song(s) and 38 catalog song(s).
+
+Your taste, learned from your seeds:
+  Derived from 12 seed song(s). Dominant genre: new jack swing (4/12). Dominant mood: happy (5/12). Average energy: 0.77. Leans 1990s. Signature tags: happy, dance, club, smooth, intense.
+
+Last.fm (live) added 60 real candidate(s) to the pool.
+
+Agent worked through 1 search step(s). Confidence: HIGH (1.00).
+
+Your mixtape (top 5), voice: dj:
+  1. Poison - Bell Biv DeVoe [new jack swing] (score 4.67)
+       because: Cued up Poison because it rides the same new jack swing as your Payday Swing.
+  2. My Prerogative - Bobby Brown [new jack swing] (score 4.20)
+       because: My Prerogative lands next to your Cassette Crush - same new jack swing energy.
+  3. Just Got Paid - Johnny Kemp [new jack swing] (score 4.19)
+       because: Just Got Paid lands next to your Payday Swing - same new jack swing energy.
+  4. Rump Shaker - Wreckx-n-Effect [new jack swing] (score 3.67)
+       because: Rump Shaker lands next to your Payday Swing - same new jack swing energy.
+  5. I Want Her - Keith Sweat [new jack swing] (score 3.18)
+       because: I Want Her lands next to your Backspin Romance - same new jack swing energy.
+```
+
+### 2. Multi-source retrieval keeps the mixtape on-genre (RAG before/after)
+
+Asked for 8 songs, the **local catalog runs out of new jack swing** and the list
+drifts to eurodance / hip hop / latin pop. Adding **Last.fm** keeps all 8 on-genre
+with real discovered tracks (Janet Jackson, Jade, Soul for Real). Full logs:
+[`logs/samples/before_local_only.txt`](logs/samples/before_local_only.txt) and
+[`logs/samples/after_with_lastfm.txt`](logs/samples/after_with_lastfm.txt).
+
+```text
+BEFORE  ($ python -m src.app --k 8 --no-lastfm)      # 3 of 8 on-genre
+  1. Poison - Bell Biv DeVoe [new jack swing]  (4.67)
+  2. My Prerogative - Bobby Brown [new jack swing]  (4.20)
+  3. Just Got Paid - Johnny Kemp [new jack swing]  (4.19)
+  4. Dancing Satellite - Bella Volt [eurodance]  (2.85)
+  5. Golden Era Glow - Dusty Vinyl [hip hop]  (2.74)
+  6. Real Love - Mary J. Blige [r&b]  (2.70)
+  7. Sol y Sombra - Grupo Marea [latin pop]  (2.50)
+  8. Backseat Comets - Indigo Parade [indie pop]  (2.48)
+
+AFTER   ($ python -m src.app --k 8)                  # 8 of 8 on-genre
+  1. Poison - Bell Biv DeVoe [new jack swing]  (4.67)
+  2. My Prerogative - Bobby Brown [new jack swing]  (4.20)
+  3. Just Got Paid - Johnny Kemp [new jack swing]  (4.19)
+  4. Rump Shaker - Wreckx-n-Effect [new jack swing]  (3.67)
+  5. I Want Her - Keith Sweat [new jack swing]  (3.18)
+  6. Alright - Janet Jackson [new jack swing]  (2.00)     <- via Last.fm
+  7. Don't Walk Away - Jade [new jack swing]  (2.00)      <- via Last.fm
+  8. Every Little Thing I Do - Soul for Real [new jack swing]  (2.00)  <- via Last.fm
+```
+
+### 3. Guardrail: refuses empty input instead of guessing
+
+```text
+$ python -m src.app --seeds data/seeds_empty_example.csv
+[guardrail] No seed songs provided - give me a few songs you like.
+```
+
+## Reliability / evaluation results
+
+`python -m src.evaluate` runs the whole pipeline against six predefined inputs,
+including the cases where the *correct* behavior is to refuse
+([`logs/eval_report.md`](logs/eval_report.md)):
+
+| Case | Input | Expected behavior | Confidence | Result |
+| --- | --- | --- | --- | --- |
+| typical_taste | 5 coherent NJS / freestyle seeds | full set, medium/high confidence | high (1.00) | PASS |
+| too_few_seeds | only 2 seeds | still answers, flags low/medium | medium (0.60) | PASS |
+| empty_input | no seed songs | guardrail blocks | blocked | PASS |
+| garbage_rows | rows with no genre/mood/energy | guardrail blocks | blocked | PASS |
+| genre_not_in_catalog | a cumbia taste (catalog has ~none) | widens 2+ steps, still answers | low (0.36) | PASS |
+| nothing_fits | dance taste vs ambient-only crate | honestly refuses | none (0.00) | PASS |
+
+**6 of 6 checks passed.**
+
+## Design decisions & trade-offs
+
+- **The original scorer stays the decision-maker.** The agent only decides *what to
+  retrieve*; ranking is still the transparent Week-6 scorer. This avoids "the AI
+  picks the songs and the scorer just decorates" drift and keeps every pick explainable.
+- **Deterministic, no LLM.** The whole system is rule-based, so runs are reproducible
+  and gradeable without an API key. The trade-off: mood parsing is keyword/attribute
+  based, not natural-language.
+- **Last.fm tags → genre/mood only; energy left blank.** Last.fm gives tags, not
+  audio features, so retrieved tracks are scored only on what Last.fm actually
+  asserts. We never fabricate an energy number, so they rank below fully-attributed
+  local songs — a fair reflection of less information.
+- **Honest refusal + confidence.** A score floor makes the agent decline rather than
+  force a weak match, and every run rates its own confidence (lowered for thin seed
+  sets or widened searches).
+- **Catalog is a real + fictional mix; features are approximate.** See the model card.
+
+## Testing summary
+
+24 automated tests pass (`python -m pytest -q`) across taste derivation, the agent
+loop (widening, seed de-duplication, honest refusal), both explanation voices, the
+input guardrail, and offline Last.fm / multi-source merge. The evaluation harness
+adds 6 end-to-end behavior checks (6/6). **What worked:** the agent reliably widens
+and refuses as designed, and offline caching makes Last.fm reproducible. **What was
+hard:** aligning Last.fm's tag vocabulary with the scorer's genre/mood/energy signals
+— resolved by tagging retrieved tracks with only the asserted field and leaving
+energy unknown. **What surprised us:** community tags are noisy (Sabrina Carpenter
+and NewJeans show up under "new jack swing"), which is documented as a limitation.
+
+## Reflection
+
+The graded responsible-AI reflection — how AI was used during development, one
+helpful and one flawed AI suggestion, and the system's limitations and biases — is
+in [`model_card.md`](model_card.md).
+
+---
+
+# 📼 The Original Project (Week 6 Base)
+
+*The full original documentation is preserved below, unchanged.*
 
 ## Project Summary
 

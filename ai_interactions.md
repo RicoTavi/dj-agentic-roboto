@@ -107,3 +107,20 @@ only a new entry with different numbers.
 - `src/main.py` — the `--mode` command-line argument selects a strategy by name, so a
   user can switch ranking behaviour without touching any code:
   `python -m src.main --mode crowd-pleaser`.
+
+---
+
+## Project 4 — Agent Reasoning Traces
+
+The DJ Agentic Roboto agent records its full plan → retrieve → check → refine
+reasoning on every run. The intermediate traces are committed here:
+
+- **Latest run trace:** [`logs/agent_run.md`](logs/agent_run.md) — plan, action,
+  observation, and decision for each search step, plus the final ranked mixtape.
+- **Evaluation report:** [`logs/eval_report.md`](logs/eval_report.md) — pass/fail and
+  confidence across six predefined inputs.
+- **Sample end-to-end runs:** [`logs/samples/`](logs/samples/) — captured console
+  output for the default run, the RAG before/after, and the guardrail case.
+
+Regenerate the trace at any time with `python -m src.app` (it writes
+`logs/agent_run.md`).

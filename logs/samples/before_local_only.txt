@@ -1,0 +1,26 @@
+Loaded 12 seed song(s) and 38 catalog song(s).
+
+Your taste, learned from your seeds:
+  Derived from 12 seed song(s). Dominant genre: new jack swing (4/12). Dominant mood: happy (5/12). Average energy: 0.77. Leans 1990s. Signature tags: happy, dance, club, smooth, intense.
+
+Agent worked through 3 search step(s). Confidence: MEDIUM (0.60).
+
+Your mixtape (top 8), voice: baseline:
+  1. Poison - Bell Biv DeVoe [new jack swing] (score 4.67)
+       because: genre match (+2.0), mood match (+1.0), energy similarity (+0.92), decade match (+0.5), mood tags ['dance'] (+0.25)
+  2. My Prerogative - Bobby Brown [new jack swing] (score 4.20)
+       because: genre match (+2.0), mood match (+1.0), energy similarity (+0.95), mood tags ['dance'] (+0.25)
+  3. Just Got Paid - Johnny Kemp [new jack swing] (score 4.19)
+       because: genre match (+2.0), mood match (+1.0), energy similarity (+0.94), mood tags ['happy'] (+0.25)
+  4. Dancing Satellite - Bella Volt [eurodance] (score 2.85)
+       because: mood match (+1.0), energy similarity (+0.85), decade match (+0.5), mood tags ['dance', 'happy'] (+0.50)
+  5. Golden Era Glow - Dusty Vinyl [hip hop] (score 2.74)
+       because: mood match (+1.0), energy similarity (+0.99), decade match (+0.5), mood tags ['happy'] (+0.25)
+  6. Real Love - Mary J. Blige [r&b] (score 2.70)
+       because: mood match (+1.0), energy similarity (+0.95), decade match (+0.5), mood tags ['smooth'] (+0.25)
+  7. Sol y Sombra - Grupo Marea [latin pop] (score 2.50)
+       because: mood match (+1.0), energy similarity (+1.00), mood tags ['dance', 'happy'] (+0.50)
+  8. Backseat Comets - Indigo Parade [indie pop] (score 2.48)
+       because: mood match (+1.0), energy similarity (+0.98), mood tags ['dance', 'happy'] (+0.50)
+
+Reasoning trace saved to /dev/null

@@ -249,3 +249,108 @@ scoring from scratch — the structure was already laid out by the assignment. G
 option I would have approached it differently, and I would want to spend more time on
 collecting real listening data rather than asking users to describe their own taste up
 front.
+
+---
+
+# Project 4 Extension — DJ Agentic Roboto (Applied AI System)
+
+This section documents the Module 4 extension that turns the base recommender into
+an agentic, multi-source applied AI system. It answers the required reflection
+prompts: limitations and biases, potential misuse, testing surprises, and AI
+collaboration (one helpful and one flawed suggestion).
+
+## 10. Data Provenance and Disclosure
+
+The retrieval catalog (`data/catalog.csv`) is a **deliberate mix of real and
+fictional tracks**. Roughly ten entries are real songs in the project's core genres
+(new jack swing, freestyle, R&B — e.g. Bobby Brown, Bell Biv DeVoe, Exposé, Pajama
+Party, Mary J. Blige); the rest are fictional placeholders that provide off-genre
+variety. **All audio-feature values (energy, valence, danceability, acousticness)
+are approximate and hand-labeled, not measured.** Tracks retrieved live from Last.fm
+(`data/lastfm_cache.json`) are real, but carry only the genre/mood tag Last.fm
+asserts — their energy and other numeric features are intentionally left blank
+rather than fabricated.
+
+## 11. Limitations and Bias (Extension)
+
+- **Popularity bias.** Last.fm's `tag.getTopTracks` returns the *most-played* tracks
+  for a tag, so live retrieval skews toward popular and recent music.
+- **Noisy community tags.** Last.fm tags are crowd-sourced and unreliable: a query
+  for "new jack swing" returns genuine tracks (Bobby Brown, Jade) alongside clear
+  mistags (Sabrina Carpenter, NewJeans, PinkPantheress). The system trusts the tag,
+  so this noise flows into candidates.
+- **Sparse attributes for retrieved tracks.** Because Last.fm tracks have no energy
+  value, they are scored on genre/mood alone and always rank below fully-attributed
+  local songs — informative, but it caps how high a discovered track can rank.
+- **No natural-language understanding.** Taste is derived by counting attributes, not
+  by interpreting free-text mood. The system cannot respond to "music for a rainy
+  Sunday" except through the tags already present.
+- **Era / language skew.** Both the seed example and catalog lean late-80s/90s,
+  English-language dance and R&B, so recommendations reflect that slice of music.
+- **Small local catalog.** 38 songs is still tiny; the local half of the system
+  inherits the original project's cold-start and coverage limits.
+
+## 12. Could This Be Misused, and How We Prevent It
+
+- **Taste narrowing / filter bubble.** A recommender that only reinforces existing
+  taste can trap listeners. Mitigations already in the system: an artist-repetition
+  penalty, staged widening (genre → mood → tags → whole catalog), and confidence
+  scoring that flags thin or over-narrow results.
+- **False authority.** The friendly "DJ voice" could make weak picks sound
+  confident. It is constrained to name a *real* seed song and real shared attributes,
+  and falls back to the mechanical explanation rather than invent a reason.
+- **Data attribution.** Last.fm data is used read-only under a free API key, trimmed,
+  and cached; no personal or user-identifying data is collected or stored.
+
+## 13. Evaluation Summary (Extension)
+
+- **Automated tests:** 24 passing (`python -m pytest -q`) covering taste derivation,
+  the agent loop (widening, seed de-duplication, honest refusal), both explanation
+  voices, the input guardrail, and offline Last.fm / multi-source merge.
+- **Evaluation harness:** 6 of 6 behavior checks pass (`python -m src.evaluate`),
+  including the two cases where the correct behavior is to refuse (empty input,
+  nothing-fits) — see `logs/eval_report.md`.
+- **Specialization, measured:** across a 5-song mixtape, the DJ voice names one of
+  the listener's seed songs **100%** of the time versus **0%** for the baseline —
+  same facts, measurably different, grounded style.
+- **RAG multi-source, measured:** for an 8-song new jack swing mixtape, genre purity
+  rises from **3/8 to 8/8** on-genre once Last.fm is added, with real discovered
+  tracks (Janet Jackson, Jade, Soul for Real) replacing off-genre filler.
+
+## 14. AI Collaboration During Development
+
+This project was built in collaboration with an AI coding assistant (Claude). Two
+concrete moments stand out.
+
+- **A flawed AI suggestion (caught).** When first asked to build the larger catalog,
+  the assistant generated an *entirely fabricated* 38-song dataset — invented artists
+  and song titles paired with confident, precise-looking audio-feature numbers
+  (e.g. "energy 0.81, valence 0.30") — while, in the same conversation, advising about
+  keeping data honest. This is exactly the hallucination anti-pattern this course
+  warns about: fluent, specific, and false. It was caught by spotting a fake row, and
+  the data was switched to real tracks with a clear provenance disclosure (Section 10).
+- **A helpful AI suggestion (kept).** The assistant proposed caching every Last.fm
+  response to a committed JSON file so the system runs offline with no API key. This
+  made the multi-source feature fully reproducible for grading and removed the network
+  as a point of failure — a design decision that materially improved reliability.
+
+## 15. Personal Reflection (Extension)
+
+**Biggest takeaway.** My biggest takeaway was seeing what happens when you take
+something you built yourself, add the power of AI and its loop of planning and
+retrieving, and then connect it to a much larger data source. Putting my own handful
+of songs up against a wider catalog let me see how something that feels small and
+niche can actually connect into something much bigger. It showed me that the
+possibilities are endless. The only real limitation is your mind.
+
+**What surprised me.** What surprised me was the static and noise that came back from
+Last.fm, like songs that clearly did not belong showing up tagged as new jack swing.
+It goes to show that even an agentic system is not error-proof. Without curation, a
+human in the loop, and quality-checking the work, letting AI run without guardrails
+can pull flawed results straight into your process. That is something worth keeping in
+mind whenever you work with AI tools.
+
+**What this project says about me as an AI engineer.** It proved to me that I have the
+capability and the know-how to use these tools to add real value, capability, and
+functionality to whatever I put my effort into. And if I can do it, anyone can, as long
+as they are willing to trust the process and step in to re-steer when it is needed.
