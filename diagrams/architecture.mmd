@@ -1,0 +1,29 @@
+%% DJ Agentic Roboto - system architecture
+%% Data flow: seed songs -> guardrail -> taste profile -> agent loop
+%% (plan/retrieve/check/refine over local + Last.fm) -> explain -> mixtape.
+%% Dotted arrows show reasoning traces and where testing checks the system.
+flowchart TD
+    seeds["User seed songs (CSV)<br/>a few tracks you like"] --> guard{"Guardrail<br/>validate_seeds"}
+    guard -- "empty / no usable signal" --> refuse1["Refuse with a clear message"]
+    guard -- "ok" --> profile["Derive TasteProfile<br/>dominant genre &amp; mood,<br/>avg energy, signature tags"]
+
+    profile --> plan["PLAN<br/>build a retrieval query"]
+    plan --> retrieve["RETRIEVE candidates<br/>(seeds excluded)"]
+    retrieve --> score["SCORE<br/>original explainable scorer"]
+    score --> check{"CHECK<br/>enough? good enough?"}
+    check -- "no: widen the search" --> plan
+    check -- "exhausted &amp; too weak" --> refuse2["Refuse honestly<br/>no good match"]
+    check -- "yes" --> explain{"EXPLAIN<br/>baseline or DJ voice"}
+    explain --> out["Ranked mixtape<br/>+ confidence score"]
+
+    subgraph sources["Retrieval sources (CompositeSource)"]
+        local[("Local catalog.csv<br/>real + fictional")]
+        lastfm[("Last.fm cached JSON<br/>real tracks by tag")]
+    end
+    local --> retrieve
+    lastfm --> retrieve
+
+    plan -. "log" .-> trace["Reasoning trace<br/>logs/agent_run.md"]
+    check -. "log" .-> trace
+
+    eval["Evaluation harness<br/>6 predefined inputs"] -. "checks behavior" .-> check
